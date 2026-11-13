@@ -4,55 +4,71 @@ import Kort from "./Kort"
 
 export default function Board() {
 
-    const numberOfDifferentCards = 5
+    const numberOfDifferentCards = 6
     const [cardsList, setCardsList] = useState([])
-    // const [compare, setCompare] = useState([])
-
-    // console.log(compare);
+    const [compare, setCompare] = useState([])
 
     useEffect(() => {
         const newCardsList = []
 
-        for (let index = 0; index <= numberOfDifferentCards; index++) {
+        for (let index = 0; index < numberOfDifferentCards; index++) {
             newCardsList.push(
-                { value: index, cardVisibility: false },
-                { value: index, cardVisibility: false }
+                { value: index, cardVisibility: false, comparedSucces: false },
+                { value: index, cardVisibility: false, comparedSucces: false }
             )
+        }
+
+        for (let i = newCardsList.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+                ;[newCardsList[i], newCardsList[j]] = [newCardsList[j], newCardsList[i]]
         }
 
         setCardsList(newCardsList)
     }, [])
 
 
-    function toggleVisible(indexOfClicked, card) {
+    // function handleClick(indexOfClicked, card) {
 
-        setCardsList(currentCards =>
+    //     // togles visibility for the current cards clicked ----------------------------------------------
+    //     setCardsList(currentCards =>
+    //         currentCards.map((card, index) =>
+    //             index === indexOfClicked ? { ...card, cardVisibility: true } : card
+    //         )
+    //     )
 
-            currentCards.map((card, index) =>
-                index === indexOfClicked ? { ...card, cardVisibility: true } : card
-            )
-        )
-
-        // console.log(card);
-        // const comparisonList = [...compare, card]
-        // setCompare(comparisonList)
-
-        // console.log(compare.length);
-
-        // if (compare.length == 1) {
-
-        //     console.log(compare[0], compare[1]);
+    //     // chekcing if the cards are the same ------------------------------------------------------
+    //     if (card.cardVisibility != true) {
 
 
-        //     if (compare[0].value == compare[1].value) {
-        //         console.log("same");
-        //     } else {
-        //         console.log("wrong");
+    //         const comparisonList = [...compare, card]
+    //         setCompare(comparisonList)
 
-        //     }
-        // }
+    //         if (compare.length === 1) {
 
-    }
+    //             if (comparisonList[0].value == comparisonList[1].value) {
+
+    //                 setCardsList(currentCards =>
+
+    //                     currentCards.map((card) =>
+    //                         card.cardVisibility == true && card.comparedSucces == false ? { ...card, comparedSucces: true } : card
+    //                     )
+    //                 )
+
+    //                 setCompare([])
+    //             } else {
+
+    //                 setCardsList(currentCards =>
+
+    //                     currentCards.map((card) =>
+    //                         card.cardVisibility == true && card.comparedSucces == false ? { ...card, cardVisibility: false } : card
+    //                     )
+    //                 )
+
+    //                 setCompare([])
+    //             }
+    //         }
+    //     }
+    // }
 
 
 
@@ -61,30 +77,8 @@ export default function Board() {
             <main>
                 <ul>
                     {cardsList.map((card, index) => {
-                        return (
-                            <li key={index} onClick={() => toggleVisible(index, card)}>
-                                {(card.cardVisibility == false) ? "" : <Kort card={card} />}
-                            </li>
-                        )
-                    }
-                    )
-
-                    }
-
-                    {/* map så mange kort som spillern ville have */}
-
-                    {/* hvert kort skal have en værdi (object) som gemmes i et array og det skal være random hvor numrende er*/}
-
-                    {/* on click skal kortene vendes(display deres nummer) */}
-
-                    {/* når to kort bliver vendt skal den matches objectets værdi med det andet valgte (det første korts værdi skal gemmes i state og compares) */}
-
-                    {/* vis værdi ikke matcher skal den skjule de to kort (ikke display deres numer) */}
-
-                    {/* hvis det er rigtigt skal de være markeret som færdigog kan ikke interageres med mere */}
-
-
-                    {/* component mugligheder (header), (et board hvor kort bliver spredt ud), (korts html structur) */}
+                        return <Kort card={card} key={index} keyName={index} setCardsList={setCardsList} compare={compare} setCompare={setCompare} />
+                    })}
                 </ul>
             </main>
         </>
